@@ -1,34 +1,48 @@
 <script setup  lang="ts">
 
 import {ref} from "vue";
-import Button from "../components/BasicButton.vue";
-import CreateBooking from "../components/CreateBooking.vue";
-import Bookings from "../components/Bookings.vue";
+import CreateDelivery from "../components/CreateDelivery.vue"
+import FinishDelivery from "../components/FinishDelivery.vue"
+import {Delivery} from "../models/Delivery.ts";
 
-const showForm = ref(false);
+const delivery = ref<Delivery | null>(null);
 
-const toggleForm = () => {
-  showForm.value = !showForm.value;
+const handleDeliveryCreated = (newDelivery: Delivery) => {
+  delivery.value =newDelivery;
+};
+const handleDeliveryFinished = (deliveryId: number) => {
+  delivery.value = null;
 };
 
 </script>
 
 <template>
-  <div class="flex flex-row justify-between px-20">
-
-    <div class="create-delivery">
-      <Button @click="toggleForm" type="button" text="Create Booking"/>
-      <CreateBooking
-          v-if="showForm"
-          @close="toggleForm"
-      />
+  <div class="flex flex-row ">
+    <div class="justify-center items-center ">
+    <CreateDelivery @delivery-created="handleDeliveryCreated" />
     </div>
-    <div class="deliveries">
-      <Bookings></Bookings>
+    <div>
+      <FinishDelivery
+          v-if="delivery"
+          :delivery="delivery"
+          @delivery-finished="handleDeliveryFinished"
+      />
     </div>
 
   </div>
 </template>
+
+<!--template>
+  <div class="grid grid-cols-2 h-screen">
+<div class="flex justify-center items-center">
+<CreateDelivery @delivery-created="handleDeliveryCreated" />
+</div>
+
+<div class="flex justify-center items-center">
+<FinishDelivery :delivery="delivery" />
+</div>
+</div>
+</template> -->
 
 <style scoped>
 

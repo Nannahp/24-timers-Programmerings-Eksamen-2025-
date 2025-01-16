@@ -19,10 +19,6 @@ const emit = defineEmits<{
   (event: "close"): void;
 }>();
 
-const exitForm = () => {
-  emit("close");
-};
-
 const handleFormSubmit = (event: Event) => {
   event.preventDefault();
   if (!props.action) {
@@ -32,20 +28,18 @@ const handleFormSubmit = (event: Event) => {
 </script>
 
 <template>
-  <!-- Form layout -->
-  <div class="flex flex-col items-center "
+
+  <div class="flex flex-col items-center bg-white p-12 rounded-md "
        :style="{ width: computedWidth }">
-    <Button
-        @click="$emit('close')"
-        text="X"/>
-    <h2>{{ props.title }}</h2>
-    <!-- form functions -->
+
+    <h2 class="text-gray-900 font-bold text-2xl p-4">{{ props.title }}</h2>
+
     <form
         :action="computedAction"
         :method="computedMethod"
         @submit="handleFormSubmit"
     >
-      <!-- Insert context from parent component -->
+
       <slot></slot>
 
     </form>

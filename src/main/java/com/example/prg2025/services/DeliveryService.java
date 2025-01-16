@@ -7,6 +7,7 @@ import com.example.prg2025.repository.PizzaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,52 +39,65 @@ public class DeliveryService {
         return deliveryRepository.findAllNonDelivered();
     }
 
-    public HttpStatus addDelivery(Long pizzaId, String address) {
+    public Optional<Delivery> addDelivery(Long pizzaId, String address) {
         Optional<Pizza> pizza = pizzaRepository.findById(pizzaId);
-        if(pizza.isEmpty()) {
-            return HttpStatus.NO_CONTENT;
+        if (pizza.isEmpty()) {
+            return Optional.empty();
         }
-        Pizza choosenPizza  = pizza.get();
-        Delivery newDelivery = new Delivery(choosenPizza,address);
+        Pizza chosenPizza = pizza.get();
+        Delivery newDelivery = new Delivery(chosenPizza, address);
         newDelivery.setExpectedArrival();
         deliveryRepository.save(newDelivery);
-        return HttpStatus.CREATED;
+        return Optional.of(newDelivery);
     }
 
     public List<Delivery> findAllDeliveriesWithoutDrones() {
         return deliveryRepository.findAllDeliveriesWithoutDrones();
     }
 
-    public HttpStatus assignDrone(Long deliveryId) {
-        Optional<Delivery> delivery = deliveryRepository.findById(deliveryId);
-        Delivery updatedDelivery = delivery.get();
-        if (delivery.isEmpty() || updatedDelivery.getDrone()!= null) {
-             return HttpStatus.BAD_REQUEST;
+    public ResponseEntity<Delivery> assignDrone(Long deliveryId) {
+        Optional<Delivery> deliveryOptional = deliveryRepository.findById(deliveryId);
+        if (deliveryOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        Delivery updatedDelivery = deliveryOptional.get();
+
+        if (updatedDelivery.getDrone() != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         List<Drone> workingDrones = droneRepository.findDronesWithStatus(Status.WORKING);
         if (workingDrones.isEmpty()) {
-            return HttpStatus.NOT_FOUND;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+
+
         Drone randomDrone = workingDrones.get(random.nextInt(workingDrones.size()));
         updatedDelivery.setDrone(randomDrone);
         deliveryRepository.save(updatedDelivery);
-        return HttpStatus.OK;
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDelivery);
     }
 
-    public HttpStatus finishDelivery(Long deliveryId) {
+    public Delivery finishDelivery(Long deliveryId) {
         Optional<Delivery> delivery = deliveryRepository.findById(deliveryId);
         if (delivery.isEmpty())
         {
-            return HttpStatus.NOT_FOUND;
+            return null;
         }
         Delivery finishedDelivery = delivery.get();
         if  (finishedDelivery.getDrone() == null) {
-            return HttpStatus.BAD_REQUEST;
+            return null;
         }
         LocalDateTime arrivalTime = LocalDateTime.now();
         finishedDelivery.setActualArrival(arrivalTime);
         deliveryRepository.save(finishedDelivery);
-        return HttpStatus.OK;
+        return  finishedDelivery;
+    }
+
+    public Optional<Delivery> getDeliveryById(Long deliveryId) {
+        return deliveryRepository.findById(deliveryId);
     }
 }

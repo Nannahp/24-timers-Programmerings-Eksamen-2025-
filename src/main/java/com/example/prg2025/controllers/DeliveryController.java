@@ -1,12 +1,14 @@
 package com.example.prg2025.controllers;
 
 import com.example.prg2025.models.Delivery;
+import com.example.prg2025.models.DeliveryRequest;
 import com.example.prg2025.services.DeliveryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = {"https://127.0.0.1:5173", "https://localhost:5173"})
 @RestController
@@ -24,14 +26,15 @@ public class DeliveryController {
         return deliveryService.findAllNonDelivered();
     }
     @PostMapping("/add")
-    public ResponseEntity<String> addDelivery(@RequestParam Long pizzaId, @RequestParam String address){
-        HttpStatus status = deliveryService.addDelivery(pizzaId, address);
-        if (status == HttpStatus.NOT_FOUND) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Pizza doesn't exist.");
+    public ResponseEntity<Delivery> addDelivery(@RequestBody DeliveryRequest request) {
+        System.out.println("Received pizzaId: " + request.pizzaId());
+        System.out.println("Received address: " + request.address());
+        Optional<Delivery> newDelivery = deliveryService.addDelivery(request.pizzaId(), request.address());
+        if (newDelivery.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Delivery created");
+        System.out.println("Created delivery: " + newDelivery.get());
+        return ResponseEntity.status(HttpStatus.CREATED).body(newDelivery.get());
     }
 
     @GetMapping("/queue")
@@ -40,34 +43,26 @@ public class DeliveryController {
     }
 
     @PostMapping("schedule")
-    public ResponseEntity<String> assignDroneToDelivery(@RequestParam Long deliveryId) {
-        HttpStatus status = deliveryService.assignDrone(deliveryId);
-        if (status == HttpStatus.BAD_REQUEST) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Delivery has a drone.");
-        }
-        if (status == HttpStatus.NOT_FOUND) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No drone avaliable");
-        }
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body("Drone assigned to delivery");
+    public ResponseEntity<Delivery> assignDroneToDelivery(@RequestParam Long deliveryId) {
+
+        ResponseEntity<Delivery> response = deliveryService.assignDrone(deliveryId);
+
+        return response;
+    }
+    @PostMapping("finish")
+    public ResponseEntity<Delivery> finishDelivery(@RequestParam Long deliveryId) {
+        Optional<Delivery> delivery = deliveryService.getDeliveryById(deliveryId);
+
+        if (delivery.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        @PostMapping("/finish")
-    public ResponseEntity<String> finishDelivery(@RequestParam Long deliveryId) {
-        HttpStatus status = deliveryService.finishDelivery(deliveryId);
-            if (status == HttpStatus.NOT_FOUND) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Delivery doesn't exist.");
-            }
-            if (status == HttpStatus.BAD_REQUEST) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("No drone assigned to delivery");
-            }
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body("Delivery finished");
-
+        Delivery updatedDelivery = deliveryService.finishDelivery(deliveryId);
+        if (updatedDelivery == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+
+        return ResponseEntity.ok(updatedDelivery);
+    }
 
 }

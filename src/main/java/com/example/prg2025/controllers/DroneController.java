@@ -85,7 +85,7 @@ public class DroneController {
     public ResponseEntity<String> createProfile(@RequestBody ProfileDto profileDto) {
         try {
             droneService.createProfile(profileDto);
-            return new ResponseEntity<>("Profile created successfully", HttpStatus.CREATED);
+            return new ResponseEntity<>("Drone created successfully", HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error creating profile: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }

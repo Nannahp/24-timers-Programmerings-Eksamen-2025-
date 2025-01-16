@@ -24,8 +24,9 @@ const handleInput = (event: Event) => {
 </script>
 
 <template>
-<div :style="{width: width || '100%'}">
-  <label :for="props.name">{{ props.label }}</label>
+<div :style="{width: width || '100%'}"
+class="flex flex-col ">
+  <label class="text-gray-900" :for="props.name">{{ props.label }}</label>
 <input
   :id="props.name"
   :name="props.name"
@@ -34,7 +35,7 @@ const handleInput = (event: Event) => {
   :placeholder="props.placeholder"
   @input="handleInput"
   :class="{'border-red-500': isError}"
-  class="p-2 border rounded-md"
+  class="p-2 border rounded-md text-gray-900"
   />
   <p v-if="props.isError" class="text-red-500 text-sm">{{ errorMessage }}</p>
 

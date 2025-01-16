@@ -53,9 +53,11 @@ import java.util.Arrays;
 
 
             Delivery delivery1 = new Delivery(pepperoni, "Jagtvej 51");
+            delivery1.setExpectedArrival();LocalDateTime.now().plusMinutes(30);
             Delivery delivery2 = new Delivery(pepperoni, "Bredgade 11");
-            delivery2.setActualArrival(LocalDateTime.now().plusHours(1));
+            delivery2.setExpectedArrival();LocalDateTime.now().plusMinutes(15);
             Delivery delivery3 = new Delivery(amager, "HC Andersens Bls 1");
+            delivery3.setExpectedArrival();LocalDateTime.now().plusMinutes(45);
 
 
             deliveryRepository.save(delivery1);
