@@ -18,12 +18,12 @@ import java.util.List;
 @RequestMapping("/drones")
 public class DroneController {
 
-    private StationService stationService;
+
     private DroneService droneService;
 
-    public DroneController(DroneService droneService, StationService stationService) {
+    public DroneController(DroneService droneService) {
         this.droneService = droneService;
-        this.stationService = stationService;
+
     }
 
 
@@ -32,10 +32,6 @@ public class DroneController {
         return droneService.findAll();
     }
 
-    @GetMapping("/stations")
-    public List<Station> getStations() {
-        return stationService.findAll();
-    }
 
     @PostMapping("/add")
     public ResponseEntity<String> addDrone() {
@@ -67,10 +63,6 @@ public class DroneController {
         return returndDroneStatusStatement(status);
     }
 
-
-
-
-
     public ResponseEntity<String> returndDroneStatusStatement(HttpStatus status) {
         if (status == HttpStatus.NOT_FOUND) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -79,37 +71,5 @@ public class DroneController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body("Drone status changed.");
     }
-
-/*
-    @PostMapping("/profiles")
-    public ResponseEntity<String> createProfile(@RequestBody ProfileDto profileDto) {
-        try {
-            droneService.createProfile(profileDto);
-            return new ResponseEntity<>("Drone created successfully", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error creating profile: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-    @DeleteMapping("/delete-profile/{id}")
-    public ResponseEntity<Void> deleteProfile(@PathVariable Long id) {
-        if (droneService.existsById(id)) {
-            droneService.deleteProfileById(id);
-            return ResponseEntity.noContent().build(); //Return 204 - No Content
-        } else {
-            return ResponseEntity.notFound().build(); //Return 404
-        }
-    }
-    @PostMapping("/edit-profile/{id}")
-    public ResponseEntity<Pizza> updateProfile(
-            @PathVariable Long id,
-            @RequestBody ProfileDto profileDto) {
-        try {
-            Pizza updatedPizza = droneService.updateProfile(id, profileDto);
-            return new ResponseEntity<>(updatedPizza, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-    }
-*/
 }
 

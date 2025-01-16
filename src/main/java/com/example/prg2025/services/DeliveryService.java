@@ -18,12 +18,15 @@ import java.util.Random;
 
 @Service
 public class DeliveryService {
-    @Autowired
-    private DeliveryRepository deliveryRepository;
-    @Autowired
-    PizzaRepository pizzaRepository;
-    @Autowired
-    DroneRepository droneRepository;
+    private final DroneRepository droneRepository;
+    private final PizzaRepository pizzaRepository;
+    private final DeliveryRepository deliveryRepository;
+
+    public DeliveryService(DroneRepository droneRepository, PizzaRepository pizzaRepository, DeliveryRepository deliveryRepository) {
+        this.droneRepository = droneRepository;
+        this.pizzaRepository = pizzaRepository;
+        this.deliveryRepository = deliveryRepository;
+    }
     Random random = new Random();
 
     public List<Delivery> findAll() {

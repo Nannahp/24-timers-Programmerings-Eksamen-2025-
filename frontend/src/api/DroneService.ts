@@ -7,6 +7,12 @@ export const fetchDrones = async (): Promise<Drone[]> => {
     const response = await axios.get(`${BASE_URL}`);
     return response.data;
 };
+export const addDrone = async (): Promise<Drone[]> => {
+    const response = await axios.post(`${BASE_URL}/add`);
+    return response.data;
+};
+
+
 
 
 

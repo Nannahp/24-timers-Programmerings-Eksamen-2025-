@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Button from "../components/BasicButton.vue";
 import Drones from"../components/Drones.vue"
+import CreateDrone from "../components/CreateDrone.vue";
 //TODO - BUTTON FOR NEW DRONES
 import {ref} from "vue";
 
@@ -13,14 +14,9 @@ import {ref} from "vue";
   <div class="flex flex-row justify-between px-20">
 
     <div class="create-drones">
-      <!--
-      <Button @click="toggleForm" type="button" text="Create new pizza"/>
-      <CreateProfile
-          v-if="showForm"
-          @close="toggleForm"
-      />-->
+      <CreateDrone></CreateDrone>
     </div>
-    <div class="profiles">
+    <div class="drones">
       <Drones></Drones>
     </div>
 
