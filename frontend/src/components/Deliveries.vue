@@ -5,7 +5,7 @@ import type {Delivery} from "../models/Delivery.ts";
 import {fetchDeliveries} from "../api/DeliveryService";
 import {addDroneToDelivery} from "../api/DeliveryService.ts"
 
-//TODO - ÆLDSTE FØRST
+
 const deliveries = ref<Delivery[]>([]);
 
 const addDrone = async (deliveryId: number) => {
@@ -49,7 +49,7 @@ onUnmounted(() => {
       <li v-for="delivery in deliveries" :key="delivery.id" class="drone-item border-2 p-4 bg-amber-500 rounded-md">
         <p>Id: {{ delivery.id }}</p>
         <p>Pizza: {{ delivery.pizza.title }}</p>
-        <p>Est. Arrival: {{ delivery.expectedArrival }}</p>
+        <p>Est. Arrival: {{ delivery.formattedExpectedArrival  }}</p>
         <p>Drone: {{ delivery.drone ? delivery.drone.id : 'No Drone Assigned' }}</p>
 
         <!-- Add Drone -->

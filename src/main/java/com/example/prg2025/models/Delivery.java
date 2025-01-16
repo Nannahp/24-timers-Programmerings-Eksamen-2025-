@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Delivery {
@@ -12,8 +13,9 @@ public class Delivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
+    @Column
     private LocalDateTime expectedArrival;
+    @Column
     private LocalDateTime actualArrival;
 
     @ManyToOne
@@ -25,7 +27,7 @@ public class Delivery {
     @JoinColumn(name = "drone_id", nullable = true)
     private Drone drone;
 
-
+    @Column
     private String address;
 
      public Delivery(Pizza pizza, String address) {
@@ -84,5 +86,21 @@ public class Delivery {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String formatDateTime(LocalDateTime dateTime) {
+        if (dateTime != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+            return dateTime.format(formatter);
+        }
+        return "";
+    }
+
+    public String getFormattedExpectedArrival() {
+        return formatDateTime(this.expectedArrival);
+    }
+
+    public String getFormattedActualArrival() {
+        return formatDateTime(this.actualArrival);
     }
 }

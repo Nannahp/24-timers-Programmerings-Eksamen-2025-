@@ -40,9 +40,9 @@ onUnmounted(() => {
 <template>
   <div class="delivery-item border-2 p-4 bg-amber-500 rounded-md" v-if="props.delivery">
     <p>Id: {{ props.delivery.id }}</p>
-    <p>Est. Arrival: {{ props.delivery.expectedArrival }}</p>
+    <p>Est. Arrival: {{ props.delivery.formattedExpectedArrival  }}</p>
     <p v-if="props.delivery.actualArrival">
-      Actual Arrival: {{ props.delivery.actualArrival }}
+      Actual Arrival: {{ props.delivery.formattedActualArrival }}
     </p>
     <p>Pizza: {{props.delivery.pizza.title}}</p>
 
