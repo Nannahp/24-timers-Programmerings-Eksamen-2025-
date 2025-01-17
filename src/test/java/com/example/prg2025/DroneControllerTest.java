@@ -1,11 +1,16 @@
 package com.example.prg2025;
 
 import com.example.prg2025.controllers.DroneController;
+import com.example.prg2025.models.Drone;
+import com.example.prg2025.models.Station;
+import com.example.prg2025.models.Status;
 import com.example.prg2025.services.DroneService;
+import com.example.prg2025.services.StationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +24,8 @@ public class DroneControllerTest {
 
     @MockitoBean
     private DroneService droneService;
-
+    @MockitoBean
+    private StationService stationService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -32,11 +38,17 @@ public class DroneControllerTest {
     @Test
     public void testAddDrone_Success() throws Exception {
 
-        when(droneService.addDrone()).thenReturn(HttpStatus.CREATED);
+        Station mockStation = new Station();
+        Drone mockDrone = new Drone(mockStation);
+        mockDrone.setId(1L);
+        when(droneService.addDrone()).thenReturn(mockDrone);
 
-        mockMvc.perform(post("/drones/add"))
+
+        mockMvc.perform(post("/drones/add")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(content().string("Drone created successfully."))
+                .andExpect(jsonPath("$.id").value(mockDrone.getId()))
+                .andExpect(jsonPath("$.status").value(mockDrone.getStatus().toString()))
                 .andReturn();
 
         verify(droneService, times(1)).addDrone();
@@ -44,13 +56,15 @@ public class DroneControllerTest {
 
     @Test
     public void testAddDrone_Failure() throws Exception {
-        when(droneService.addDrone()).thenReturn(HttpStatus.NOT_FOUND);
+//returns 201 not 404
+        when(stationService.stationsSortedByLeastNumberOfDrones()).thenReturn(null);
 
-        mockMvc.perform(post("/drones/add"))
+        mockMvc.perform(post("/drones/add")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("No stations."))
+                .andExpect(content().string("No stations in database"))
                 .andReturn();
 
-        verify(droneService, times(1)).addDrone();
+        verify(stationService, times(1)).stationsSortedByLeastNumberOfDrones();
     }
 }

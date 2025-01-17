@@ -9,7 +9,9 @@ public class Pizza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String title;
+    @Column
     private int price;
 
 

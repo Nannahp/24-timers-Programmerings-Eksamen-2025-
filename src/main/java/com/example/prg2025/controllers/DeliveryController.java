@@ -27,14 +27,8 @@ public class DeliveryController {
     }
     @PostMapping("/add")
     public ResponseEntity<Delivery> addDelivery(@RequestBody DeliveryRequest request) {
-        System.out.println("Received pizzaId: " + request.pizzaId());
-        System.out.println("Received address: " + request.address());
-        Optional<Delivery> newDelivery = deliveryService.addDelivery(request.pizzaId(), request.address());
-        if (newDelivery.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-        System.out.println("Created delivery: " + newDelivery.get());
-        return ResponseEntity.status(HttpStatus.CREATED).body(newDelivery.get());
+        Delivery newDelivery = deliveryService.addDelivery(request.pizzaId(), request.address());
+        return ResponseEntity.status(HttpStatus.CREATED).body(newDelivery);
     }
 
     @GetMapping("/queue")
@@ -44,25 +38,15 @@ public class DeliveryController {
 
     @PostMapping("schedule")
     public ResponseEntity<Delivery> assignDroneToDelivery(@RequestParam Long deliveryId) {
-
-        ResponseEntity<Delivery> response = deliveryService.assignDrone(deliveryId);
-
-        return response;
+        Delivery updatedDelivery= deliveryService.assignDrone(deliveryId);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedDelivery);
     }
+
     @PostMapping("finish")
     public ResponseEntity<Delivery> finishDelivery(@RequestParam Long deliveryId) {
-        Optional<Delivery> delivery = deliveryService.getDeliveryById(deliveryId);
-
-        if (delivery.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        Delivery updatedDelivery = deliveryService.finishDelivery(deliveryId);
-        if (updatedDelivery == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
-        return ResponseEntity.ok(updatedDelivery);
+        Delivery finishedDelivery = deliveryService.finishDelivery(deliveryId);
+        System.out.println(finishedDelivery.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(finishedDelivery);
     }
 
 }

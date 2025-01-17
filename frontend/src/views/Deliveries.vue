@@ -10,7 +10,8 @@ import Deliveries from "../components/Deliveries.vue";
 </script>
 
 <template>
-  <div class="flex flex-row justify-between px-20">
+  <h1 class="mt-8">DELIVERIES</h1>
+  <div class="flex flex-row justify-center px-20 py-12">
 
     <div class="deliveries">
       <Deliveries></Deliveries>

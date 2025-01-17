@@ -18,6 +18,7 @@ const removalTimeout = ref<number | null>(null);
 const finishDelivery = async (deliveryId: number) => {
   try {
     const updatedDelivery = await finishDeliverySim(deliveryId);
+    console.log("updated: " + updatedDelivery)
     props.delivery.actualArrival = updatedDelivery.actualArrival;
 
     removalTimeout.value = setTimeout(() => {

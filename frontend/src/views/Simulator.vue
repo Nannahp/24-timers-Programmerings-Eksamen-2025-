@@ -17,11 +17,13 @@ const handleDeliveryFinished = (deliveryId: number) => {
 </script>
 
 <template>
-  <div class="flex flex-row ">
+  <h1 class="mt-8">CUSTOMER SIMULATOR</h1>
+  <div class="flex flex-row justify-between px-32 mt-6 ">
     <div class="justify-center items-center ">
     <CreateDelivery @delivery-created="handleDeliveryCreated" />
     </div>
-    <div>
+    <div class="mr-28">
+      <h3 class="font-bold text-xl py-6">Delivery:</h3>
       <FinishDelivery
           v-if="delivery"
           :delivery="delivery"

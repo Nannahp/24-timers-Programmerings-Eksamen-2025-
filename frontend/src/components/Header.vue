@@ -6,19 +6,16 @@ import Logo from "./Logo.vue"
 </script>
 
 <template>
-  <header class=" flex flex-col p-4
+  <header class=" flex flex-col p-8
                   absolute top-0 w-screen">
 
-    <div class="flex flex-row justify-between items-center px-6 ">
-      <Logo></Logo>
+    <Navigation class="-mt-8 px-12">
 
-      <div>
-        <Navigation></Navigation>
-      </div>
-    </div>
+    </Navigation>
+
 
     <!-- line  -->
-    <div class=" flex flex-row justify-between px-6">
+    <div class=" flex flex-row justify-between px-6 -mt-8">
     <span class="w-4/12 h-[2px] bg-white mt-2 block flex self-center"></span>
     <span class="w-4/12 h-[2px] bg-white mt-2 block flex self-center"></span>
     </div>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {useRouter} from 'vue-router'
+import Logo from "../components/Logo.vue"
 
 const router = useRouter();
 
@@ -19,20 +20,25 @@ const isActive = (path: string, hash?: string) => {
 <template>
 <nav>
   <!-- Nav Links -->
-  <div>
+  <div class="flex flex-row justify-between items-center">
+    <div class="flex flex-row items-center">
+      <Logo class="w-32 h-32"></logo>
     <router-link to="/simulator"
                  :class="{
                  'text-white': isActive('/simulator'),
                  'hover:text-gray-700': true,
-                 'px-20': true
+                 'px-28': true
+
                }">
       SIMULATOR
     </router-link>
+    </div>
+    <div>
     <router-link to="/deliveries"
                  :class="{
                  'text-white': isActive('/deliveries'),
                  'hover:text-gray-700': true,
-                 'px-20': true
+                 'px-28': true
                }">
       DELIVERIES
     </router-link>
@@ -40,10 +46,11 @@ const isActive = (path: string, hash?: string) => {
                  :class="{
                  'text-white': isActive('/drones'),
                  'hover:text-gray-700': true,
-                 'px-20': false
+                 'px-28': false
                }">
       DRONES
     </router-link>
+    </div>
   </div>
 </nav>
 </template>

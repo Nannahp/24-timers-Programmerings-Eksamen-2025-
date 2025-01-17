@@ -15,7 +15,8 @@ export const addDroneToDelivery = async (deliveryId: number) => {
 };
 
 export const finishDeliverySim = async (deliveryId: number) => {
-    const response = await axios.post(`${BASE_URL}/finish?deliveryId=${deliveryId}`);
+    const response = await axios.post<Delivery>(`${BASE_URL}/finish?deliveryId=${deliveryId}`);
+    console.log("response:" + response.data)
     return response.data;
 };
 

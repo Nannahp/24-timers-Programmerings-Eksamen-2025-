@@ -3,8 +3,10 @@
 </script>
 
 <template>
-  <h1> DRONE PIZZA</h1>
-  <h2>WELCOME!</h2>
-
-
+  <div class="flex items-center justify-center font-bold mt-40">
+    <div class="text-center">
+      <h1 class="p-4 text-8xl">DRONE PIZZA</h1>
+      <h2 class="italic">WELCOME!</h2>
+    </div>
+  </div>
 </template>

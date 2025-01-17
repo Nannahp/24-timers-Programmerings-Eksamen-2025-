@@ -34,42 +34,33 @@ public class DroneController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<String> addDrone() {
-        HttpStatus status = droneService.addDrone();
-
-        if (status == HttpStatus.NOT_FOUND) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No stations.");
-        }
+    public ResponseEntity<Drone> addDrone() {
+        Drone drone = droneService.addDrone();
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Drone created successfully.");
+                .body(drone);
     }
 
 
     @PostMapping("/enable")
     public ResponseEntity<String> enabledDrone(@RequestParam Long droneId) {
-        HttpStatus status = droneService.changeDroneStatus(droneId, Status.WORKING);
-        return returndDroneStatusStatement(status);
+        Drone drone = droneService.changeDroneStatus(droneId, Status.WORKING);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Drone with id: " + droneId + " status changed to: " + drone.getStatus());
     }
 
     @PostMapping("/disable")
     public ResponseEntity<String> disabledDrone(@RequestParam Long droneId) {
-        HttpStatus status = droneService.changeDroneStatus(droneId, Status.OUT_OF_SERVICE);
-        return returndDroneStatusStatement(status);
+        Drone drone = droneService.changeDroneStatus(droneId, Status.OUT_OF_SERVICE);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Drone with id: " + droneId + " status changed to: " + drone.getStatus());
     }
     @PostMapping("/retire")
     public ResponseEntity<String> retireDrone(@RequestParam Long droneId) {
-        HttpStatus status = droneService.changeDroneStatus(droneId, Status.PHASED_OUT);
-        return returndDroneStatusStatement(status);
+        Drone drone = droneService.changeDroneStatus(droneId, Status.PHASED_OUT);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Drone with id: " + droneId + " status changed to: " + drone.getStatus());
     }
 
-    public ResponseEntity<String> returndDroneStatusStatement(HttpStatus status) {
-        if (status == HttpStatus.NOT_FOUND) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Drone doesn't exist.");
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("Drone status changed.");
-    }
+
 }
 

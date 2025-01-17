@@ -18,6 +18,6 @@ const computedOpacity = !props.opacity  ? props.opacity : 1;
 
 <template>
   <button @click="handleClick" class="bg-transparent">
-    <img src="../assets/drone-removebg-preview.png">
+    <img src="../assets/pizza-removebg-preview.png">
   </button>
 </template>

@@ -1,5 +1,8 @@
 package com.example.prg2025.services;
 
+import com.example.prg2025.exceptions.DroneNotFoundException;
+import com.example.prg2025.exceptions.NoStationsFoundException;
+import com.example.prg2025.exceptions.NoWorkingDronesException;
 import com.example.prg2025.models.Drone;
 import com.example.prg2025.models.Station;
 import com.example.prg2025.models.Status;
@@ -27,28 +30,28 @@ public DroneService(DroneRepository droneRepository, StationService stationServi
         return droneRepository.findAll();
     }
 
-    public HttpStatus  addDrone() {
+    public Drone  addDrone() {
         List<Station> stations = stationService.stationsSortedByLeastNumberOfDrones();
         if(stations == null) {
-            return HttpStatus.NO_CONTENT;
+            throw new NoStationsFoundException();
         }
         Station smallestStation  =stations.getFirst();
         Drone newDrone = new Drone(smallestStation);
         smallestStation.addDrone(newDrone);
         droneRepository.save(newDrone);
         stationService.saveStation(smallestStation);
-        return HttpStatus.CREATED;
+        return newDrone;
     }
 
-    public HttpStatus changeDroneStatus(Long droneId, Status status) {
+    public Drone changeDroneStatus(Long droneId, Status status) {
         Optional<Drone> drone = droneRepository.findById(droneId);
         if (drone.isEmpty()) {
-            return HttpStatus.NOT_FOUND;
+            throw new DroneNotFoundException("Drone with id: " + droneId+ "not found");
         }
         Drone existingDrone = drone.get();
         existingDrone.setStatus(status);
         droneRepository.save(existingDrone);
-        return HttpStatus.OK;
+        return existingDrone;
 
     }
 }
